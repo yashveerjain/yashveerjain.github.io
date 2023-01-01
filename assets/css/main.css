@@ -1796,11 +1796,13 @@ input, select, textarea {
 	ul {
 		list-style: disc;
 		padding-left: 1em;
+		/* text-align: justify; */
 	}
 
 		ul li {
 			padding-left: 0.5em;
 		}
+
 
 	ol {
 		list-style: decimal;
@@ -1810,6 +1812,18 @@ input, select, textarea {
 		ol li {
 			padding-left: 0.25em;
 		}
+
+/* Experience */
+ul.ep {
+	list-style: disc;
+	padding-left: 1em;
+	text-align: justify;
+}
+
+	ul.ep li {
+		padding-left: 0.5em;
+	}
+
 
 /* Icons */
 
