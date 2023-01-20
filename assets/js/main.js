@@ -1,123 +1,161 @@
-/*
-	Prologue by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+/**
+* Template Name: Personal - v2.2.0
+* Template URL: https://bootstrapmade.com/personal-free-resume-bootstrap-template/
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
 */
+!(function($) {
+  "use strict";
 
-(function($) {
+  // Nav Menu
+  $(document).on('click', '.nav-menu a, .mobile-nav a', function(e) {
+    if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+      var hash = this.hash;
+      var target = $(hash);
+      if (target.length) {
+        e.preventDefault();
 
-	var	$window = $(window),
-		$body = $('body'),
-		$nav = $('#nav');
+        if ($(this).parents('.nav-menu, .mobile-nav').length) {
+          $('.nav-menu .active, .mobile-nav .active').removeClass('active');
+          $(this).closest('li').addClass('active');
+        }
 
-	// Breakpoints.
-		breakpoints({
-			wide:      [ '961px',  '1880px' ],
-			normal:    [ '961px',  '1620px' ],
-			narrow:    [ '961px',  '1320px' ],
-			narrower:  [ '737px',  '960px'  ],
-			mobile:    [ null,     '736px'  ]
-		});
+        if (hash == '#header') {
+          $('#header').removeClass('header-top');
+          $("section").removeClass('section-show');
+          return;
+        }
 
-	// Play initial animations on page load.
-		$window.on('load', function() {
-			window.setTimeout(function() {
-				$body.removeClass('is-preload');
-			}, 100);
-		});
+        if (!$('#header').hasClass('header-top')) {
+          $('#header').addClass('header-top');
+          setTimeout(function() {
+            $("section").removeClass('section-show');
+            $(hash).addClass('section-show');
+          }, 350);
+        } else {
+          $("section").removeClass('section-show');
+          $(hash).addClass('section-show');
+        }
 
-	// Nav.
-		var $nav_a = $nav.find('a');
+        if ($('body').hasClass('mobile-nav-active')) {
+          $('body').removeClass('mobile-nav-active');
+          $('.mobile-nav-toggle i').toggleClass('icofont-navigation-menu icofont-close');
+          $('.mobile-nav-overly').fadeOut();
+        }
 
-		$nav_a
-			.addClass('scrolly')
-			.on('click', function(e) {
+        return false;
 
-				var $this = $(this);
+      }
+    }
+  });
 
-				// External link? Bail.
-					if ($this.attr('href').charAt(0) != '#')
-						return;
+  // Activate/show sections on load with hash links
+  if (window.location.hash) {
+    var initial_nav = window.location.hash;
+    if ($(initial_nav).length) {
+      $('#header').addClass('header-top');
+      $('.nav-menu .active, .mobile-nav .active').removeClass('active');
+      $('.nav-menu, .mobile-nav').find('a[href="' + initial_nav + '"]').parent('li').addClass('active');
+      setTimeout(function() {
+        $("section").removeClass('section-show');
+        $(initial_nav).addClass('section-show');
+      }, 350);
+    }
+  }
 
-				// Prevent default.
-					e.preventDefault();
+  // Mobile Navigation
+  if ($('.nav-menu').length) {
+    var $mobile_nav = $('.nav-menu').clone().prop({
+      class: 'mobile-nav d-lg-none'
+    });
+    $('body').append($mobile_nav);
+    $('body').prepend('<button type="button" class="mobile-nav-toggle d-lg-none"><a style="font-size:px"><i class="icofont-navigation-menu"></blink></a></i></button>');
+    $('body').append('<div class="mobile-nav-overly"></div>');
 
-				// Deactivate all links.
-					$nav_a.removeClass('active');
+    $(document).on('click', '.mobile-nav-toggle', function(e) {
+      $('body').toggleClass('mobile-nav-active');
+      $('.mobile-nav-toggle i').toggleClass('icofont-navigation-menu icofont-close');
+      $('.mobile-nav-overly').toggle();
+    });
 
-				// Activate link *and* lock it (so Scrollex doesn't try to activate other links as we're scrolling to this one's section).
-					$this
-						.addClass('active')
-						.addClass('active-locked');
+    $(document).click(function(e) {
+      var container = $(".mobile-nav, .mobile-nav-toggle");
+      if (!container.is(e.target) && container.has(e.target).length === 0) {
+        if ($('body').hasClass('mobile-nav-active')) {
+          $('body').removeClass('mobile-nav-active');
+          $('.mobile-nav-toggle i').toggleClass('icofont-navigation-menu icofont-close');
+          $('.mobile-nav-overly').fadeOut();
+        }
+      }
+    });
+  } else if ($(".mobile-nav, .mobile-nav-toggle").length) {
+    $(".mobile-nav, .mobile-nav-toggle").hide();
+  }
 
-			})
-			.each(function() {
+  // jQuery counterUp
+  $('[data-toggle="counter-up"]').counterUp({
+    delay: 10,
+    time: 1000
+  });
 
-				var	$this = $(this),
-					id = $this.attr('href'),
-					$section = $(id);
+  // Skills section
+  $('.skills-content').waypoint(function() {
+    $('.progress .progress-bar').each(function() {
+      $(this).css("width", $(this).attr("aria-valuenow") + '%');
+    });
+  }, {
+    offset: '80%'
+  });
 
-				// No section for this link? Bail.
-					if ($section.length < 1)
-						return;
+  // Testimonials carousel (uses the Owl Carousel library)
+  $(".testimonials-carousel").owlCarousel({
+    autoplay: true,
+    dots: true,
+    loop: true,
+    responsive: {
+      0: {
+        items: 1
+      },
+      768: {
+        items: 2
+      },
+      900: {
+        items: 3
+      }
+    }
+  });
 
-				// Scrollex.
-					$section.scrollex({
-						mode: 'middle',
-						top: '-10vh',
-						bottom: '-10vh',
-						initialize: function() {
+  // Porfolio isotope and filter
+  $(window).on('load', function() {
+    var portfolioIsotope = $('.portfolio-container').isotope({
+      itemSelector: '.portfolio-item',
+      layoutMode: 'fitRows'
+    });
 
-							// Deactivate section.
-								$section.addClass('inactive');
+    $('#portfolio-flters li').on('click', function() {
+      $("#portfolio-flters li").removeClass('filter-active');
+      $(this).addClass('filter-active');
 
-						},
-						enter: function() {
+      portfolioIsotope.isotope({
+        filter: $(this).data('filter')
+      });
+    });
 
-							// Activate section.
-								$section.removeClass('inactive');
+  });
 
-							// No locked links? Deactivate all links and activate this section's one.
-								if ($nav_a.filter('.active-locked').length == 0) {
+  // Initiate venobox (lightbox feature used in portofilo)
+  $(document).ready(function() {
+    $('.venobox').venobox({
+      'share': false
+    });
+  });
 
-									$nav_a.removeClass('active');
-									$this.addClass('active');
-
-								}
-
-							// Otherwise, if this section's link is the one that's locked, unlock it.
-								else if ($this.hasClass('active-locked'))
-									$this.removeClass('active-locked');
-
-						}
-					});
-
-			});
-
-	// Scrolly.
-		$('.scrolly').scrolly();
-
-	// Header (narrower + mobile).
-
-		// Toggle.
-			$(
-				'<div id="headerToggle">' +
-					'<a href="#header" class="toggle"></a>' +
-				'</div>'
-			)
-				.appendTo($body);
-
-		// Header.
-			$('#header')
-				.panel({
-					delay: 500,
-					hideOnClick: true,
-					hideOnSwipe: true,
-					resetScroll: true,
-					resetForms: true,
-					side: 'left',
-					target: $body,
-					visibleClass: 'header-visible'
-				});
+  // Portfolio details carousel
+  $(".portfolio-details-carousel").owlCarousel({
+    autoplay: true,
+    dots: true,
+    loop: true,
+    items: 1
+  });
 
 })(jQuery);
