@@ -69,6 +69,26 @@ video {
     filter: grayscale(50%) blur(1px) brightness(80%);
 }
 
+@media (max-width: 768px) {
+  video {
+      width: 100%;
+      height: auto;
+      top: 0;
+      left: 0;
+      transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  video {
+      width: 100%;
+      height: auto;
+      top: 0;
+      left: 0;
+      transform: none;
+  }
+}
+
 .stopfade { 
    opacity: .5;
 }
