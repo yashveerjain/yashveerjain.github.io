@@ -103,12 +103,37 @@
 
 
          <!-- ======= Video Background ======= -->
-
         <video poster="" id="bgvid" playsinline autoplay muted loop>
           <source src="assets/vid/Drone_vid.mp4" type="video/mp4">
           <!-- <source src="http://thenewcode.com/assets/videos/polina.mp4" type="video/mp4"> 
           <source src="assets/img/videos/background3.mp4" type="video/mp4">  -->
-        </video> 
+        </video>
+
+        <style>
+          #bgvid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+          }
+        
+          @media (max-width: 768px) {
+            #bgvid {
+              width: 100%;
+              height: auto;
+            }
+          }
+        
+          @media (max-width: 480px) {
+            #bgvid {
+              width: 100%;
+              height: auto;
+            }
+          }
+        </style>
 
         <!-- <video poster="" id="bgvid" playsinline autoplay muted loop>
                  <source src="http://thenewcode.com/assets/videos/polina.mp4" type="video/mp4"> 
